@@ -1,8 +1,15 @@
+<!-- ================================================================= -->
+<!-- FORMULA MANAGER - FRONTEND (index.html)                            -->
+<!-- ================================================================= -->
+
 <!DOCTYPE html>
 <html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>F1 Manager - Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Formula Manager - Dashboard</title>
+
+    <!-- ================= STYLING (CSS) ================= -->
     <style>
         :root {
             --bg-dark: #0f1015;
@@ -23,7 +30,6 @@
             background-image: radial-gradient(circle at center, #1a1d24 0%, #0f1015 100%);
         }
 
-        /* Topmenu */
         .navbar {
             background: var(--card-bg);
             border-bottom: 1px solid var(--border-color);
@@ -31,531 +37,584 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .nav-logo {
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--accent-red);
-            letter-spacing: 1px;
-        }
-
-        .nav-tabs {
-            display: flex;
+            flex-wrap: wrap;
             gap: 10px;
         }
 
+        .nav-left { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .nav-logo { font-size: 20px; font-weight: bold; color: var(--accent-red); letter-spacing: 1px; }
+        .nav-tabs { display: flex; gap: 10px; }
+
         .tab-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.2s;
-            text-transform: uppercase;
+            background: transparent; border: none; color: var(--text-muted);
+            padding: 8px 16px; font-size: 14px; font-weight: 600;
+            cursor: pointer; border-radius: 4px; transition: all 0.2s; text-transform: uppercase;
         }
+        .tab-btn:hover { color: var(--text-main); background: #222630; }
+        .tab-btn.active { color: var(--text-main); background: var(--accent-red); }
 
-        .tab-btn:hover {
-            color: var(--text-main);
-            background: #222630;
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+        .team-badge, .season-badge {
+            background: #111318; border: 1px solid var(--border-color);
+            padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: bold;
         }
+        .team-badge span { color: var(--accent-red); }
+        .season-badge { color: var(--text-muted); font-weight: 600; }
 
-        .tab-btn.active {
-            color: var(--text-main);
-            background: var(--accent-red);
-        }
-
-        /* Højre hjørne logo / profil */
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .team-badge {
-            background: #111318;
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .team-badge span {
-            color: var(--accent-red);
-        }
-
-        /* Container & Indhold */
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
         .card {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            border: 1px solid var(--border-color);
+            background: var(--card-bg); padding: 30px; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); border: 1px solid var(--border-color);
         }
 
-        h2 {
-            margin-top: 0;
-            font-size: 22px;
-            color: var(--text-main);
-            border-bottom: 2px solid var(--accent-red);
-            padding-bottom: 10px;
-            display: inline-block;
-        }
+        h2 { margin-top: 0; font-size: 22px; color: var(--text-main); border-bottom: 2px solid var(--accent-red); padding-bottom: 10px; display: inline-block; }
+        h3 { font-size: 15px; color: var(--text-muted); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
 
-        h3 {
-            font-size: 15px;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; }
+        input, select {
+            width: 100%; padding: 12px; background: #111318; border: 1px solid var(--border-color);
+            color: var(--text-main); border-radius: 6px; box-sizing: border-box; font-size: 14px;
         }
-
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            background: #111318;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--accent-red);
-        }
+        input:focus, select:focus { outline: none; border-color: var(--accent-red); }
 
         button.action-btn {
-            width: 100%;
-            padding: 12px;
-            background: var(--accent-red);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-            text-transform: uppercase;
-            margin-top: 5px;
+            width: 100%; padding: 12px; background: var(--accent-red); color: white;
+            border: none; border-radius: 6px; font-weight: bold; font-size: 14px;
+            cursor: pointer; transition: background 0.2s; text-transform: uppercase; margin-top: 5px;
         }
+        button.action-btn:hover { background: var(--accent-hover); }
+        button.action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        button.action-btn:hover {
-            background: var(--accent-hover);
-        }
+        .btn-secondary { background: #2a2e39; width: auto; padding: 8px 16px; border: none; color: white; border-radius: 4px; cursor: pointer; }
+        .btn-secondary:hover { background: #3b4252; }
 
-        .btn-secondary {
-            background: #2a2e39;
-            margin-top: 15px;
-            width: auto;
-            padding: 8px 16px;
-            border: none;
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .btn-secondary:hover {
-            background: #3b4252;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .success, .error {
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
+        .hidden { display: none !important; }
+        .success, .error { padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; }
         .success { background: rgba(76, 175, 80, 0.1); border: 1px solid #4CAF50; color: #4CAF50; }
         .error { background: rgba(244, 67, 54, 0.1); border: 1px solid #f44336; color: #f44336; }
 
-        /* Dashboard Grid & Cards */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
 
         .stats-box, .driver-card {
-            background: #111318;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 15px;
+            background: #111318; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 15px;
         }
-
         .stats-box p, .driver-card p {
-            display: flex;
-            justify-content: space-between;
-            margin: 8px 0;
-            font-size: 14px;
-            border-bottom: 1px solid #1a1d24;
-            padding-bottom: 6px;
+            display: flex; justify-content: space-between; gap: 12px; margin: 8px 0; font-size: 14px; border-bottom: 1px solid #1a1d24; padding-bottom: 6px;
         }
+        .stats-box span, .driver-card span { color: var(--text-muted); }
 
-        .stats-box p:last-child, .driver-card p:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
+        .driver-header { font-weight: bold; color: var(--accent-red); font-size: 15px; margin-bottom: 10px; }
+        .skill-row { display: flex; align-items: center; gap: 10px; margin: 10px 0; font-size: 14px; flex-wrap: wrap; }
+        .skill-name { width: 110px; color: var(--text-muted); }
+        .skill-bar { position: relative; flex: 1; min-width: 60px; height: 8px; background: #1a1d24; border-radius: 4px; }
+        .skill-fill { height: 100%; background: var(--accent-red); border-radius: 4px; }
+        .skill-cap { position: absolute; top: -3px; bottom: -3px; width: 2px; background: #ffffff; opacity: 0.6; }
+        .skill-val { width: 28px; text-align: right; }
 
-        .stats-box span, .driver-card span {
-            color: var(--text-muted);
-        }
+        .mini-btn { background: #2a2e39; color: white; border: none; border-radius: 4px; padding: 6px 10px; font-size: 12px; cursor: pointer; white-space: nowrap; }
+        .mini-btn:hover:not(:disabled) { background: var(--accent-red); }
+        .mini-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        .driver-header {
-            font-weight: bold;
-            color: var(--accent-red);
-            font-size: 15px;
-            margin-bottom: 10px;
-        }
+        .league-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .league-table th { text-align: left; color: var(--text-muted); font-size: 12px; text-transform: uppercase; padding: 8px; border-bottom: 1px solid var(--border-color); }
+        .league-table td { padding: 10px 8px; border-bottom: 1px solid #1a1d24; }
+        .league-table .num { text-align: right; }
+        .league-table tr.is-user td { background: #1f1b24; color: var(--accent-red); font-weight: bold; }
 
-        .auth-container {
-            max-width: 400px;
-            margin: 80px auto;
-        }
+        .auth-container { max-width: 400px; margin: 80px auto; }
     </style>
 </head>
 <body>
 
-<!-- Topmenu (Vises kun når man er logget ind) -->
+<!-- ================= TOPMENU & NAVIGATION ================= -->
 <div id="navbar" class="navbar hidden">
     <div class="nav-left">
-        <div class="nav-logo">🏎️ F1 MANAGER</div>
+        <div class="nav-logo">🏎️ FORMULA MANAGER</div>
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('dashboard', this)">Min Bil / Hold</button>
-            <button class="tab-btn" onclick="switchTab('drivers', this)">Kørere</button>
-            <button class="tab-btn" onclick="switchTab('race', this)">🏁 Løb</button>
+            <button class="tab-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">Min Bil / Hold</button>
+            <button class="tab-btn" data-tab="drivers" onclick="switchTab('drivers')">Kørere</button>
+            <button class="tab-btn" data-tab="race" onclick="switchTab('race')">🏁 Løb</button>
+            <button class="tab-btn" data-tab="league" onclick="switchTab('league')">🏆 Liga</button>
         </div>
     </div>
     <div class="nav-right">
-        <div class="team-badge">
-            <span id="nav-team-name">Holdnavn</span>
-        </div>
+        <div class="season-badge" id="nav-season-info">Sæson 1 · Løb 1/25</div>
+        <div class="team-badge"><span id="nav-team-name">Holdnavn</span></div>
         <button class="btn-secondary" onclick="logout()" style="margin:0;">Log ud</button>
     </div>
 </div>
 
 <div class="container">
-    <!-- Login & Oprettelse Del -->
-    <div id="auth-section" class="card auth-container">
-        <h2>F1 Manager</h2>
-        <div id="msg" style="display: none;"></div>
 
-        <div style="margin-top: 20px;">
+    <!-- ================= FANE 0: LOGIN & OPRETTELSE ================= -->
+    <div id="auth-section" class="card auth-container">
+        <h2>Formula Manager</h2>
+        <div id="msg" class="hidden"></div>
+
+        <form id="register-form" style="margin-top: 20px;" onsubmit="registerUser(event)">
             <h3>Opret Hold</h3>
             <div class="input-group">
-                <label>Brugernavn</label>
-                <input type="text" id="reg-user" placeholder="Vælg brugernavn">
+                <label for="reg-user">Brugernavn</label>
+                <input type="text" id="reg-user" placeholder="Vælg brugernavn" maxlength="30" autocomplete="username">
             </div>
             <div class="input-group">
-                <label>Adgangskode</label>
-                <input type="password" id="reg-pass" placeholder="Vælg adgangskode">
+                <label for="reg-pass">Adgangskode (mindst 6 tegn)</label>
+                <input type="password" id="reg-pass" placeholder="Vælg adgangskode" autocomplete="new-password">
             </div>
             <div class="input-group">
-                <label>F1 Holdnavn</label>
-                <input type="text" id="reg-team" placeholder="F.eks. MullerF1 Racing">
+                <label for="reg-team">Racerholdets Navn</label>
+                <input type="text" id="reg-team" placeholder="F.eks. Muller Racing GP" maxlength="30">
             </div>
-            <button class="action-btn" onclick="registerUser()">Opret og Start</button>
-        </div>
+            <button type="submit" class="action-btn">Opret og Start</button>
+        </form>
 
         <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 25px 0;">
 
-        <div>
+        <form id="login-form" onsubmit="loginUser(event)">
             <h3>Log ind</h3>
             <div class="input-group">
-                <label>Brugernavn</label>
-                <input type="text" id="login-user" placeholder="Dit brugernavn">
+                <label for="login-user">Brugernavn</label>
+                <input type="text" id="login-user" placeholder="Dit brugernavn" maxlength="30" autocomplete="username">
             </div>
             <div class="input-group">
-                <label>Adgangskode</label>
-                <input type="password" id="login-pass" placeholder="Din adgangskode">
+                <label for="login-pass">Adgangskode</label>
+                <input type="password" id="login-pass" placeholder="Din adgangskode" autocomplete="current-password">
             </div>
-            <button class="action-btn" onclick="loginUser()">Log ind</button>
-        </div>
+            <button type="submit" class="action-btn">Log ind</button>
+        </form>
     </div>
 
-    <!-- Dashboard Del (Fane 1: Min Bil / Hold) -->
+    <!-- ================= FANE 1: MIN BIL / HOLD ================= -->
     <div id="tab-dashboard" class="card tab-content hidden">
         <h2>Holdets Fabrik & Bil</h2>
+        <div id="dashboard-msg" class="hidden" style="margin-top: 15px;"></div>
         <div class="grid-2" style="margin-top: 20px;">
             <div>
                 <h3>Generelt</h3>
-                <div class="stats-box" id="team-info">
-                    Henter holddata...
-                </div>
+                <div class="stats-box" id="team-info">Henter holddata...</div>
             </div>
             <div>
                 <h3>Bil Specifikationer</h3>
-                <div class="stats-box" id="car-stats">
-                    Henter bil-data...
-                </div>
+                <div class="stats-box" id="car-stats">Henter bil-data...</div>
             </div>
         </div>
     </div>
 
-    <!-- Kørere Del (Fane 2: Kørere) -->
+    <!-- ================= FANE 2: KØRERE ================= -->
     <div id="tab-drivers" class="card tab-content hidden">
         <h2>Holdets Kørere</h2>
-        <div style="margin-top: 20px;" id="drivers-list">
-            Henter kørere...
-        </div>
+        <p style="color: var(--text-muted); font-size: 13px; margin: 15px 0 0;">
+            Den hvide streg viser kørerens potentiale. Hver kører kan trænes én gang om dagen.
+        </p>
+        <div id="drivers-msg" class="hidden" style="margin-top: 15px;"></div>
+        <div style="margin-top: 20px;" id="drivers-list">Henter kørere...</div>
     </div>
 
-    <!-- Løb Del (Fane 3: Dagens Grand Prix) -->
+    <!-- ================= FANE 3: LØB & STRATEGI ================= -->
+
     <div id="tab-race" class="card tab-content hidden">
         <h2>Dagens Grand Prix</h2>
+        <p style="color: var(--text-muted); font-size: 13px; margin: 15px 0 0;">
+            Indstil individuel dækstrategi og bil-setup for Bil #1 og Bil #2, før du tilmelder dig.
+        </p>
 
-        <div class="stats-box" id="today-track-box" style="margin-bottom: 20px;">
-            Henter dagens bane...
+        <div id="race-msg" class="hidden" style="margin-top: 15px;"></div>
+
+        <div class="stats-box" id="today-track-box" style="margin-top: 20px; margin-bottom: 20px;">Henter dagens bane...</div>
+
+        <div class="grid-2" style="margin-bottom: 20px;">
+            <!-- Bil 1 Taktik -->
+            <div class="stats-box" style="margin-bottom: 0;">
+                <h3 style="color: var(--accent-red);">🏎️ Bil #1 (1. Kører)</h3>
+                <div class="input-group" style="margin-bottom: 12px;">
+                    <label for="car1-tyre">Dækstrategi</label>
+                    <select id="car1-tyre">
+                        <option value="soft">🔴 Bløde dæk</option>
+                        <option value="medium" selected>🟡 Medium dæk</option>
+                        <option value="hard">⚪ Hårde dæk</option>
+                    </select>
+                </div>
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label for="car1-setup">Bil-setup</label>
+                    <select id="car1-setup">
+                        <option value="balanced" selected>⚖️ Balanceret</option>
+                        <option value="engine">⚡ Motor-fokus</option>
+                        <option value="aero">🌀 Aero-fokus</option>
+                        <option value="reliability">🛡️ Pålidelighed</option>
+                        <option value="risky">🎲 Chanceridning</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Bil 2 Taktik -->
+            <div class="stats-box" style="margin-bottom: 0;">
+                <h3 style="color: var(--accent-red);">🏎️ Bil #2 (2. Kører)</h3>
+                <div class="input-group" style="margin-bottom: 12px;">
+                    <label for="car2-tyre">Dækstrategi</label>
+                    <select id="car2-tyre">
+                        <option value="soft">🔴 Bløde dæk</option>
+                        <option value="medium" selected>🟡 Medium dæk</option>
+                        <option value="hard">⚪ Hårde dæk</option>
+                    </select>
+                </div>
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label for="car2-setup">Bil-setup</label>
+                    <select id="car2-setup">
+                        <option value="balanced" selected>⚖️ Balanceret</option>
+                        <option value="engine">⚡ Motor-fokus</option>
+                        <option value="aero">🌀 Aero-fokus</option>
+                        <option value="reliability">🛡️ Pålidelighed</option>
+                        <option value="risky">🎲 Chanceridning</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
-        <button class="action-btn" onclick="runRace()" style="margin-bottom: 20px;">Kør Dagens Løb 🏎️</button>
+        <button id="race-btn" class="action-btn" onclick="runRace()" style="margin-bottom: 20px;">Tilmeld begge biler til dagens løb 🏁</button>
 
-        <div id="race-results" class="hidden">
-            <h3>Løbsresultat</h3>
-            <div id="race-summary" style="margin-bottom: 15px; font-weight: bold; color: var(--accent-red);"></div>
-            <div id="race-grid-list"></div>
-        </div>
+        <div class="stats-box" id="race-status">Henter status...</div>
+
+        <h3>Dagens felt (foreløbigt)</h3>
+        <div id="race-grid-list">Henter startfelt...</div>
     </div>
+
+    <!-- ================= FANE 4: LIGA & HALL OF FAME ================= -->
+    <div id="tab-league" class="card tab-content hidden">
+        <h2 id="league-title">Ligaen</h2>
+
+        <div class="grid-2" style="margin-top: 20px;">
+            <div>
+                <h3>🏭 Holdmesterskab</h3>
+                <div id="league-team-standings" class="stats-box">Henter stilling...</div>
+            </div>
+            <div>
+                <h3>🏎️ Kørermesterskab</h3>
+                <div id="league-driver-standings" class="stats-box">Henter stilling...</div>
+            </div>
+        </div>
+
+        <h3>Seneste afgjorte løb</h3>
+        <div id="league-last" class="stats-box">Henter resultater...</div>
+
+        <h3>🏆 Hall of Fame</h3>
+        <div id="league-hof" class="stats-box">Henter Hall of Fame...</div>
+    </div>
+
 </div>
 
+<!-- ================= JAVASCRIPT LOGIK ================= -->
 <script>
-    const API_URL = 'http://localhost:3000/api';
+    const API_URL = location.protocol === 'file:' ? 'http://localhost:3000/api' : '/api';
 
-    function showMessage(text, type) {
-        const msg = document.getElementById('msg');
-        msg.style.display = 'block';
-        msg.className = type;
-        msg.innerText = text;
+    function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, c => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
     }
 
-    function switchTab(tabName, btnElement) {
+    function formatKr(amount) {
+        return Number(amount).toLocaleString('da-DK') + ' kr.';
+    }
+
+    function showMessage(elementId, text, type) {
+        const el = document.getElementById(elementId);
+        el.className = type;
+        el.textContent = text;
+    }
+
+    function hideMessage(elementId) {
+        const el = document.getElementById(elementId);
+        el.className = 'hidden';
+        el.textContent = '';
+    }
+
+    async function apiFetch(path, options = {}, auth = false) {
+        const headers = { ...(options.headers || {}) };
+        if (auth) headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+        const response = await fetch(`${API_URL}${path}`, { ...options, headers });
+        let data = {};
+        try { data = await response.json(); } catch (e) { }
+        return { response, data };
+    }
+
+    function isAuthError(response) {
+        return response.status === 401 || response.status === 403;
+    }
+
+    function switchTab(tabName) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
 
         document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-        btnElement.classList.add('active');
+        document.querySelector(`.tab-btn[data-tab="${tabName}"]`).classList.add('active');
 
-        if (tabName === 'race') {
-            loadTodayTrack();
-        }
+        if (tabName === 'race') { hideMessage('race-msg'); loadTodayTrack(); loadRaceToday(); }
+        if (tabName === 'league') { loadLeague(); }
+        if (tabName === 'dashboard') { loadDashboardData(); loadTodayTrack(); }
     }
 
-    async function registerUser() {
+    function showApp() {
+        document.getElementById('auth-section').classList.add('hidden');
+        document.getElementById('navbar').classList.remove('hidden');
+        switchTab('dashboard');
+    }
+
+    function logout(message) {
+        localStorage.removeItem('token');
+        document.getElementById('navbar').classList.add('hidden');
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        document.getElementById('auth-section').classList.remove('hidden');
+        if (message) showMessage('msg', message, 'error');
+    }
+
+    async function registerUser(event) {
+        event.preventDefault();
         const username = document.getElementById('reg-user').value.trim();
-        const password = document.getElementById('reg-pass').value.trim();
+        const password = document.getElementById('reg-pass').value;
         const teamName = document.getElementById('reg-team').value.trim();
 
-        if (!username || !password || !teamName) {
-            showMessage("Udfyld venligst alle felter.", "error");
-            return;
-        }
-
-        try {
-            const response = await fetch(`${API_URL}/register`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password, teamName })
-            });
-            const data = await response.json();
-
-            if (response.ok) {
-                showMessage("Hold oprettet succesfuldt! Logger ind...", "success");
-                document.getElementById('login-user').value = username;
-                document.getElementById('login-pass').value = password;
-                await loginUser();
-            } else {
-                showMessage(data.error, "error");
-            }
-        } catch (err) {
-            showMessage("Kunne ikke oprette forbindelse til serveren.", "error");
-        }
+        if (!username || !password || !teamName) { showMessage('msg', "Udfyld alle felter.", "error"); return; }
+        const { response, data } = await apiFetch('/register', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password, teamName })
+        });
+        if (response.ok) { await performLogin(username, password); }
+        else { showMessage('msg', data.error || "Fejl ved oprettelse.", "error"); }
     }
 
-    async function loginUser() {
+    async function loginUser(event) {
+        event.preventDefault();
         const username = document.getElementById('login-user').value.trim();
-        const password = document.getElementById('login-pass').value.trim();
+        const password = document.getElementById('login-pass').value;
+        await performLogin(username, password);
+    }
 
-        if (!username || !password) {
-            showMessage("Udfyld både brugernavn og adgangskode.", "error");
-            return;
-        }
-
-        try {
-            const response = await fetch(`${API_URL}/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-            const data = await response.json();
-
-            if (response.ok) {
-                localStorage.setItem('token', data.token);
-                await loadDashboard();
-            } else {
-                showMessage(data.error, "error");
-            }
-        } catch (err) {
-            showMessage("Kunne ikke logge ind.", "error");
+    async function performLogin(username, password) {
+        const { response, data } = await apiFetch('/login', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        if (response.ok) {
+            localStorage.setItem('token', data.token);
+            if (await loadDashboardData()) { hideMessage('msg'); showApp(); }
+        } else {
+            showMessage('msg', data.error || "Forkert login.", "error");
         }
     }
 
-    async function loadDashboard() {
-        const token = localStorage.getItem('token');
-        if (!token) return;
+    const SKILL_LABELS = { pace: 'Tempo', overtaking: 'Overhaling', technique: 'Teknik', consistency: 'Konstans' };
 
-        try {
-            const responseTeam = await fetch(`${API_URL}/my-team`, {
-                method: 'GET',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const teamData = await responseTeam.json();
+    function formatShort(amount) {
+        const n = Number(amount);
+        return n >= 1000000 ? (n / 1000000).toFixed(2).replace('.', ',') + ' mio. kr.' : Math.round(n / 1000) + ' t. kr.';
+    }
 
-            const responseDrivers = await fetch(`${API_URL}/my-drivers`, {
-                method: 'GET',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const driversData = await responseDrivers.json();
+    function renderDrivers(drivers, budget) {
+        if (!drivers.length) return 'Ingen kørere.';
+        const mainDrivers = drivers.filter(d => d.role !== 'Reserve');
 
-            if (responseTeam.ok && responseDrivers.ok) {
-                document.getElementById('auth-section').classList.add('hidden');
-                document.getElementById('navbar').classList.remove('hidden');
-                document.getElementById('tab-dashboard').classList.remove('hidden');
+        return drivers.map(d => {
+            const skillRows = Object.keys(SKILL_LABELS).map(key => {
+                const t = d.training[key];
+                const disabled = d.trainedToday || t.maxed || budget < t.cost;
+                const label = t.maxed ? 'Maks' : `Træn +${t.gain} · ${formatShort(t.cost)}`;
+                return `
+                        <div class="skill-row">
+                            <span class="skill-name">${SKILL_LABELS[key]}</span>
+                            <div class="skill-bar">
+                                <div class="skill-fill" style="width: ${Math.min(100, Number(t.level))}%"></div>
+                                <div class="skill-cap" style="left: ${Math.min(100, Number(d.potential))}%"></div>
+                            </div>
+                            <strong class="skill-val">${escapeHtml(t.level)}</strong>
+                            <button class="mini-btn" ${disabled ? 'disabled' : ''} onclick="trainDriver(${Number(d.id)}, '${key}')">${label}</button>
+                        </div>`;
+            }).join('');
 
-                const team = teamData.team;
+            const swapButtons = d.role === 'Reserve'
+                ? mainDrivers.map(o => `<button class="mini-btn" onclick="swapDrivers(${Number(d.id)}, ${Number(o.id)})">Byt med ${escapeHtml(o.name)}</button>`).join('')
+                : '';
 
-                document.getElementById('nav-team-name').innerText = team.team_name;
-
-                document.getElementById('team-info').innerHTML = `
-                    <p><span>Holdnavn:</span> <strong>${team.team_name}</strong></p>
-                    <p><span>Budget:</span> <strong>${team.budget.toLocaleString('da-DK')} kr.</strong></p>
-                `;
-
-                document.getElementById('car-stats').innerHTML = `
-                    <p><span>Motor Power:</span> <strong>Level ${team.engine_power}</strong></p>
-                    <p><span>Aerodynamik:</span> <strong>Level ${team.aero_level}</strong></p>
-                    <p><span>Pålidelighed:</span> <strong>Level ${team.reliability}</strong></p>
-                `;
-
-                const driversHtml = driversData.drivers.map(driver => `
+            return `
                     <div class="driver-card">
-                        <div class="driver-header">${driver.role}: ${driver.name}</div>
-                        <p><span>Alder:</span> <strong>${driver.age ? driver.age + ' år' : 'N/A'}</strong></p>
-                        <p><span>Evne (Skill):</span> <strong>Rating ${driver.skill}</strong></p>
-                        <p><span>Løn:</span> <strong>${driver.salary.toLocaleString('da-DK')} kr.</strong></p>
-                    </div>
-                `).join('');
+                        <div class="driver-header">${escapeHtml(d.role)}: ${escapeHtml(d.name)}</div>
+                        <p><span>Alder:</span> <strong>${escapeHtml(d.age)} år</strong></p>
+                        <p><span>Rating:</span> <strong>${escapeHtml(d.overall)}</strong></p>
+                        <p><span>Potentiale:</span> <strong>${escapeHtml(d.potential)}</strong></p>
+                        <p><span>Løn:</span> <strong>${formatKr(d.salary)}</strong></p>
+                        ${skillRows}
+                        ${d.trainedToday ? '<p><span>Træning:</span> <strong>✅ Trænet i dag</strong></p>' : ''}
+                        ${swapButtons ? `<div class="driver-actions">${swapButtons}</div>` : ''}
+                    </div>`;
+        }).join('');
+    }
 
-                document.getElementById('drivers-list').innerHTML = driversHtml;
-            }
-        } catch (err) {
-            console.error("Fejl ved hentning af data", err);
-        }
+    async function doAction(path, body, messageId) {
+        hideMessage(messageId);
+        const { response, data } = await apiFetch(path, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+        }, true);
+        if (isAuthError(response)) { logout("Session udløbet."); return; }
+        showMessage(messageId, response.ok ? data.message : (data.error || "Fejl"), response.ok ? 'success' : 'error');
+        await loadDashboardData();
+    }
+
+    function upgradeCar(stat) { return doAction('/upgrade', { stat }, 'dashboard-msg'); }
+    function trainDriver(driverId, skill) { return doAction(`/drivers/${driverId}/train`, { skill }, 'drivers-msg'); }
+    function swapDrivers(driverId, withDriverId) { return doAction('/drivers/swap', { driverId, withDriverId }, 'drivers-msg'); }
+
+    async function loadDashboardData() {
+        if (!localStorage.getItem('token')) return false;
+        const [teamRes, driversRes] = await Promise.all([apiFetch('/my-team', {}, true), apiFetch('/my-drivers', {}, true)]);
+        if (isAuthError(teamRes.response)) { logout("Session udløbet."); return false; }
+        if (!teamRes.response.ok) return false;
+
+        const team = teamRes.data.team;
+        const upgrades = teamRes.data.upgrades || {};
+        document.getElementById('nav-team-name').textContent = team.team_name;
+
+        document.getElementById('team-info').innerHTML = `
+                <p><span>Holdnavn:</span> <strong>${escapeHtml(team.team_name)}</strong></p>
+                <p><span>Budget:</span> <strong>${formatKr(team.budget)}</strong></p>
+            `;
+
+        const statLabels = { engine: 'Motor', aero: 'Aerodynamik', reliability: 'Pålidelighed' };
+        document.getElementById('car-stats').innerHTML = Object.keys(statLabels).map(key => {
+            const u = upgrades[key];
+            const disabled = u.maxed || team.budget < u.cost;
+            return `
+                    <div class="skill-row">
+                        <span class="skill-name">${statLabels[key]}</span>
+                        <div class="skill-bar"><div class="skill-fill" style="width: ${Math.min(100, Number(u.level))}%"></div></div>
+                        <strong class="skill-val">${escapeHtml(u.level)}</strong>
+                        <button class="mini-btn" ${disabled ? 'disabled' : ''} onclick="upgradeCar('${key}')">
+                            ${u.maxed ? 'Maks' : 'Opgrader · ' + formatShort(u.cost)}
+                        </button>
+                    </div>`;
+        }).join('');
+
+        document.getElementById('drivers-list').innerHTML = renderDrivers(driversRes.data.drivers || [], team.budget);
+        return true;
     }
 
     async function loadTodayTrack() {
-        try {
-            const response = await fetch(`${API_URL}/today-track`);
-            const data = await response.json();
-            const track = data.track;
+        const box = document.getElementById('today-track-box');
+        const { response, data } = await apiFetch('/today-track');
+        if (!response.ok) return;
+        document.getElementById('nav-season-info').textContent = `Sæson ${data.season} · Løb ${data.round}/25`;
+        box.innerHTML = `<p><span>Sæson ${escapeHtml(data.season)} · Løb ${escapeHtml(data.round)} af 25:</span> <strong>${escapeHtml(data.track.country)} - ${escapeHtml(data.track.name)}</strong></p>`;
+    }
 
-            let focusText = "";
-            if (track.statFocus === 'engine') focusText = "⚡ Høj Topfart (Motor)";
-            if (track.statFocus === 'aero') focusText = "🌀 Svære Sving (Aerodynamik)";
-            if (track.statFocus === 'reliability') focusText = "🛡️ Krævende Bane (Pålidelighed)";
+    async function loadRaceToday() {
+        const statusBox = document.getElementById('race-status');
+        const gridBox = document.getElementById('race-grid-list');
+        const raceBtn = document.getElementById('race-btn');
 
-            document.getElementById('today-track-box').innerHTML = `
-                <p><span>Dagens Bane (Dag ${data.dayOfMonth} i måneden):</span> <strong>${track.country} - ${track.name}</strong></p>
-                <p><span>Banens primære krav:</span> <strong>${focusText}</strong></p>
-            `;
-        } catch (err) {
-            console.error("Fejl ved hentning af bane", err);
+        const { response, data } = await apiFetch('/race/today', {}, true);
+        if (!response.ok) return;
+
+        if (data.entered) {
+            raceBtn.disabled = true;
+            raceBtn.textContent = `✅ Tilmeldt til Løb ${data.round}/25`;
+            statusBox.innerHTML = `<p><strong>Status:</strong> Tilmeldt. Afgøres ved midnat.</p>`;
+        } else {
+            raceBtn.disabled = false;
+            raceBtn.textContent = `Tilmeld til Løb ${data.round}/25 🏎️`;
+            statusBox.innerHTML = `<p><strong>Status:</strong> Ikke tilmeldt.</p>`;
         }
+
+        if (data.lastResult) {
+            const l = data.lastResult;
+            statusBox.innerHTML += `<p style="margin-top:10px; border-top:1px solid var(--border-color); padding-top:8px;"><span>Seneste:</span> <strong>+${escapeHtml(l.total_points)}p · ${formatKr(l.prize_money)}</strong></p>`;
+        }
+
+        const grid = data.grid || [];
+        gridBox.innerHTML = grid.length ? `
+                <table class="league-table">
+                    <thead><tr><th>Plads</th><th>Kører</th><th>Hold</th></tr></thead>
+                    <tbody>
+                        ${grid.map(row => `<tr class="${row.isUser ? 'is-user' : ''}"><td>P${escapeHtml(row.position)}</td><td>${escapeHtml(row.driver)}</td><td>${escapeHtml(row.team)}</td></tr>`).join('')}
+                    </tbody>
+                </table>
+            ` : 'Ingen kørere.';
     }
 
     async function runRace() {
-        const token = localStorage.getItem('token');
-        if (!token) return;
+        async function runRace() {
+            const raceBtn = document.getElementById('race-btn');
 
-        try {
-            const response = await fetch(`${API_URL}/race`, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const data = await response.json();
+            const car1 = {
+                tyreStrategy: document.getElementById('car1-tyre').value,
+                carSetup: document.getElementById('car1-setup').value
+            };
+            const car2 = {
+                tyreStrategy: document.getElementById('car2-tyre').value,
+                carSetup: document.getElementById('car2-setup').value
+            };
+
+            raceBtn.disabled = true;
+            hideMessage('race-msg');
+
+            const { response, data } = await apiFetch('/race', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ car1, car2 })
+            }, true);
 
             if (response.ok) {
-                document.getElementById('race-results').classList.remove('hidden');
-                document.getElementById('race-summary').innerText =
-                    `Du sluttede som P${data.position} på ${data.track.name}! Præmie modtaget: ${data.prizeMoney.toLocaleString('da-DK')} kr.`;
-
-                const gridHtml = data.grid.map(item => `
-                    <div class="driver-card" style="${item.isUser ? 'border: 2px solid var(--accent-red); background: #1f1b24;' : ''}">
-                        <p><span>P${item.position}:</span> <strong>${item.team} ${item.isUser ? '(DIT HOLD)' : ''}</strong></p>
-                    </div>
-                `).join('');
-
-                document.getElementById('race-grid-list').innerHTML = gridHtml;
-
-                // Opdater budgettet på dashboardet
-                loadDashboard();
+                showMessage('race-msg', data.message, 'success');
+                loadRaceToday();
             } else {
-                // Hvis man allerede har kørt i dag
-                alert(data.error);
+                showMessage('race-msg', data.error || "Fejl", "error");
+                raceBtn.disabled = false;
             }
-        } catch (err) {
-            console.error("Fejl ved afvikling af løb", err);
+        }
+
+        raceBtn.disabled = true;
+        hideMessage('race-msg');
+
+        const { response, data } = await apiFetch('/race', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tyreStrategy, carSetup })
+        }, true);
+
+        if (response.ok) {
+            showMessage('race-msg', data.message, 'success');
+            loadRaceToday();
+        } else {
+            showMessage('race-msg', data.error || "Fejl", "error");
+            raceBtn.disabled = false;
         }
     }
 
-    function logout() {
-        localStorage.removeItem('token');
-        document.getElementById('navbar').classList.add('hidden');
-        document.getElementById('tab-dashboard').classList.add('hidden');
-        document.getElementById('tab-drivers').classList.add('hidden');
-        document.getElementById('tab-race').classList.add('hidden');
-        document.getElementById('auth-section').classList.remove('hidden');
-        document.getElementById('msg').style.display = 'none';
+    async function loadLeague() {
+        const teamBox = document.getElementById('league-team-standings');
+        const driverBox = document.getElementById('league-driver-standings');
+        const lastBox = document.getElementById('league-last');
+        const hofBox = document.getElementById('league-hof');
+
+        const [standingsRes, lastRes] = await Promise.all([apiFetch('/league/standings', {}, true), apiFetch('/league/last-race', {}, true)]);
+        if (!standingsRes.response.ok) return;
+
+        document.getElementById('league-title').textContent = `Ligaen – Sæson ${standingsRes.data.season}`;
+
+        const teams = standingsRes.data.teamStandings || [];
+        teamBox.innerHTML = `<table class="league-table"><thead><tr><th>#</th><th>Hold</th><th class="num">Point</th></tr></thead><tbody>${teams.map(r => `<tr class="${r.isUser ? 'is-user' : ''}"><td>${escapeHtml(r.rank)}</td><td>${escapeHtml(r.team)}</td><td class="num">${escapeHtml(r.points)}</td></tr>`).join('')}</tbody></table>`;
+
+        const drivers = standingsRes.data.driverStandings || [];
+        driverBox.innerHTML = `<table class="league-table"><thead><tr><th>#</th><th>Kører</th><th>Hold</th><th class="num">Point</th></tr></thead><tbody>${drivers.map(r => `<tr class="${r.isUser ? 'is-user' : ''}"><td>${escapeHtml(r.rank)}</td><td>${escapeHtml(r.driver)}</td><td>${escapeHtml(r.team)}</td><td class="num">${escapeHtml(r.points)}</td></tr>`).join('')}</tbody></table>`;
+
+        const last = lastRes.data;
+        const results = last.results || [];
+        lastBox.innerHTML = results.length ? `<table class="league-table"><thead><tr><th>Plads</th><th>Kører</th><th>Hold</th><th class="num">Point</th></tr></thead><tbody>${results.map(r => `<tr class="${r.isUser ? 'is-user' : ''}"><td>P${escapeHtml(r.position)}</td><td>${escapeHtml(r.driver_name)}</td><td>${escapeHtml(r.team_name)}</td><td class="num">+${escapeHtml(r.points)}</td></tr>`).join('')}</tbody></table>` : 'Ingen afgjorte løb.';
+
+        const hof = standingsRes.data.hallOfFame || [];
+        hofBox.innerHTML = hof.length ? `<table class="league-table"><thead><tr><th>Sæson</th><th>Holdmester</th><th>Kørermester</th></tr></thead><tbody>${hof.map(r => `<tr><td>Sæson ${escapeHtml(r.season)}</td><td><strong>${escapeHtml(r.team_name)}</strong></td><td><strong>${escapeHtml(r.driver_name)}</strong></td></tr>`).join('')}</tbody></table>` : 'Ingen vindere endnu.';
     }
 
-    window.onload = () => {
+    window.onload = async () => {
         if (localStorage.getItem('token')) {
-            loadDashboard();
+            if (await loadDashboardData()) { showApp(); } else { logout(); }
         }
     };
 </script>

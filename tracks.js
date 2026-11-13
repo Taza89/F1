@@ -1,4 +1,4 @@
-// tracks.js - Liste over 25 F1-baner (1 for hver dag i måneden)
+// tracks.js - Liste over 25 Grand Prix-baner fordelt pr. løb i sæsonen
 const tracks = [
     { id: 1, name: "Bahrain International Circuit", country: "🇧🇭 Bahrain", statFocus: "engine" },
     { id: 2, name: "Jeddah Corniche Circuit", country: "🇸🇦 Saudi-Arabien", statFocus: "engine" },
@@ -27,13 +27,9 @@ const tracks = [
     { id: 25, name: "Nürburgring GP", country: "🇩🇪 Tyskland", statFocus: "reliability" }
 ];
 
-// Hjælpefunktion: Henter dagens bane baseret på dag i måneden (1-25)
-function getTodayTrack() {
-    const day = new Date().getDate(); // Får dagens dato (1 til 31)
-
-    // Hvis datoen er f.eks. d. 26.-31., genbruger vi bane 25 eller holder pause indtil d. 1.
-    const trackIndex = Math.min(day, 25) - 1;
-    return tracks[trackIndex];
+function getTrackByRound(roundNumber) {
+    const index = Math.max(0, Math.min(roundNumber - 1, tracks.length - 1));
+    return tracks[index];
 }
 
-module.exports = { tracks, getTodayTrack };
+module.exports = { tracks, getTrackByRound };
